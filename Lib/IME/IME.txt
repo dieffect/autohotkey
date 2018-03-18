@@ -1,0 +1,85 @@
+Autohotkey IME制御用 関数集 (コピペ/組込用)(IME.ahk)
+    NT/98系両対応(たぶん)  (Autohotkey v1.0.34以降)
+                                             2008.09.20
+
+.■動作環境
+    AutoHotkey v1.0.34以降くらい
+    OS: NT/98系 
+    動作確認 XP SP1 / WXG Ver 4.03.027 / MS-IME Standard 2002 ver.8.1
+             NT SP6 / MS-IME 2000
+
+.■概要
+   IMEの各種状態の取得、セット関数群
+   以前 SandSスクリプト(流行らせるあぷろだの029)に同梱したものを修正
+
+   なお元になった IME制御関数(029.zip)は、あぷろだ018.zipのIME制御用
+   外部プログラム(Cソース付き)をAHKスクリプトに書き直したものです。
+   ソースを提供して下さった 投稿スレ86氏 に感謝
+
+.■注意事項
+  ・入力モードについて
+    MS-IMEのデフォルト設定(たぶん)では IME ON/OFFどちらでもOKでしたが、
+    IME種(または設定)によってはうまく動かないかも。
+    ウチのWXG場合IME OFF時にセットしたものは無効(ONの時にリセットされる)だた
+    先にONにしてからセットしてやるといいみたいでした。
+
+    ※ ローマ字/かな入力モードの状態取得について(IME_GetConvMode())
+    [Ctrl]+[CapsLock]および 言語バー[KANA]ボタンで切替えた時の状態は取れない
+    みたいです。[Alt]+[カタカナ]キーで切替えた場合の状態は取れました。
+    (XP Pro SP2/ AHK 1.0.47.06にて確認)
+
+  ・変換モードについて
+    MS-IME以外での動作は不明。とりあえずWXGのプロパティには見当たらない。
+    ATOK,Japanistあたりはどうなんですかね。よくわかりません。
+
+.■使用方法
+..◆組込元で #Include IME.ahkして各関数を呼び出して使用
+
+..◆関数ライブラリスクリプトとして使用
+     AutoHotkey.exeのあるフォルダ内の「Lib」フォルダ、もしくは
+    「%A_MyDocuments%\AutoHotkey\Lib\」に突っ込んどくと#Includeなしで使えます。
+
+   ・必要関数だけをスクリプトにコピペして使用
+     IME OFFるのにしか使わないのにいちいち組込むのｳｾﾞｰって人用
+     IME_SET()だけ切出してご自分のスクリプトに適当に貼付けて使って下さい。
+     (内部CALLやめたので各関数間に依存関係はありません。)
+
+.■削除方法
+    全てのファイルを削除して下さい。
+    本スクリプトではレジストリへの読み書きはしていません。
+
+.■改変・再配布
+    改変・再配布ともにご自由にどうぞ
+    NYSLとかいうライセンスがあるらしいので、それでひとつ。
+    http://www.kmonos.net/nysl/
+
+.■履歴
+  2008.07.11 (IME.ahk)
+    ・v1.0.47以降の 関数ライブラリスクリプト用にファイル名を戻した。
+     つか結局丸ごと組込んで使うなら↓の コピペ用の修正いらなかったんじゃ…
+
+  2005.09.12 非公開
+    ・依存関係がうっとおしいので関数内で下層関数を呼び出すのを止めた。
+    ・v 1.0.34あたりからの Function パラメータ省略機能に対応
+      アクティブウィンドウに対する制御は "A" を省略可能に。
+    ・WinTitleを省略しやすいようSet系関数のパラメータ順を変更
+      IME_SetConvMode(WinTitle,ConvMode)
+       → IME_SetConvMode(ConvMode,WinTitle="")
+      IME_SetSentenceMode(WinTitle,SentenceMode)
+       → IME_SetSentenceMode(SentenceMode,WinTitle="")
+
+    ・IME_ON() IME_OFF() IME_TOGGLE() 廃止
+      ON/OFFセットは IME_SET(0or1)で統括
+
+  2005.05.20 SandS同梱版 (IME_Func.ahk)
+    ・関数とAPIが使えるようになったので SUB → Function化
+      面倒なんである程度カプセル化。リトライとか外してみる。
+      アクティブウィンドウに対する制御はIME_STATUS("A")とかやって下さい。
+    ・A_DetectHiddenWindowsの状態を覚えておいてIMEへSendMessaegeした後
+      戻すようにした。
+
+  2005.03.27 (IME.ahk)
+    ・投稿スレ86氏が張られた あぷろだ018.zipのIME制御用外部プログラム
+      (Cソース付き)をAHKスクリプトに書き直し。
+
+[EOF]

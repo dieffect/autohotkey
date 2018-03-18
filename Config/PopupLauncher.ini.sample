@@ -1,0 +1,128 @@
+;***********************************************************************************************
+;
+; ポップアップランチャーのメニュー項目
+;
+;***********************************************************************************************
+; ■メニューには次の項目を指定することができます。メニューは指定した順に表示されます。
+;   [Application] ：起動したいアプリケーションの情報を設定します。
+;   [Script]      ：実行したいAutoHotKeyスクリプトの情報を設定します。
+;   [Separator]   ：メニュー区切りを挿入します。
+;   [SubMenu]     ：サブメニューを挿入します。
+;
+; ■メニュー項目の書式は次の通りです。
+;   [Section]           ← "Section"に、メニュー項目の種類を指定します。
+;       Key =Value      ← "Key"は設定項目名で、"Value"はその設定値です。
+;                          "Key"から"="までの間は、スペースを挿入しても構いませんが、
+;                          "="から"Value"の間は、スペースを入れないようにして下さい。
+;
+; ■メニューのグループについて。
+;   各メニュー項目にグループ番号を指定することで、メニューを階層化することができます。
+;   トップメニューはグループ0です。サブメニューを追加する場合は、
+;   そのサブメニューが所属するグループ番号と、サブメニュー自身のグループ番号を指定します。
+;
+;   グループ0
+;   ┌────────┐
+;   │　　　項目　　　│
+;   ├────────┤
+;   │　　　項目　　　│　グループ1
+;   ├────────┤　┌────────┐
+;   │　サブメニュー　│→│　　　項目　　　│
+;   ├────────┤　├────────┤
+;   │　　　項目　　　│　│　　　項目　　　│
+;   └────────┘　└────────┘
+;
+; ■次の説明に従って、各メニュー項目を設定して下さい。
+;   [Application]
+;   Group   =0                          ; メニュー項目を表示するメニューのグループ番号
+;   Name    =エクスプローラー           ; メニュー項目名
+;   AppPath =C:\Windows\explorer.exe    ; 実行したいアプリケーションのパス
+;   Param   =C:\                        ; アプリケーションの実行パラメータ
+;   ExecDir =                           ; 作業フォルダ(※省略時は、アプリケーションのフォルダになります)
+;
+;   [Script]
+;   Group   =2                          ; メニュー項目を表示するメニューのグループ番号
+;   Name    =区切り線を追加             ; メニュー項目名
+;   Script  =InsertChars                ; 実行したいAutoHotKeyスクリプト
+;   ParamN  =-                          ; AutoHotKeyスクリプトの第1引数
+;   ParamN  =64                         ; AutoHotKeyスクリプトの第2引数
+;   ※パラメータの数だけ、"ParamN" の行を追加して下さい。
+;
+;   [Separator]
+;   Group   =0                          ; メニュー区切りを表示するメニューのグループ番号
+;
+;   [SubMenu]
+;   Parent  =0                          ; サブメニューを表示するメニューのグループ番号
+;   Group   =2                          ; サブメニュー自身のグループ番号
+;   Title   =テキスト処理               ; サブメニュー項目名
+
+;---------------------------------------------------------------
+[Application]
+Group   =0
+Name    =Internet Explorer
+AppPath =C:\Program Files\Internet Explorer\iexplore.exe
+Param   =
+ExecDir =
+
+[Application]
+Group   =0
+Name    =Internet Explorer(privte)
+AppPath =C:\Program Files\Internet Explorer\iexplore.exe
+Param   =-private
+ExecDir =
+
+[Application]
+Group   =0
+Name    =エクスプローラー
+AppPath =C:\Windows\explorer.exe
+Param   =
+ExecDir =
+
+[Application]
+Group   =0
+Name    =Windows 電卓
+AppPath =C:\Windows\System32\calc.exe
+Param   =
+ExecDir =
+
+[Application]
+Group   =0
+Name    =コマンド プロンプト
+AppPath =C:\Windows\System32\cmd.exe
+Param   =
+ExecDir =
+
+[Application]
+Group   =0
+Name    =ペイント
+AppPath =C:\Windows\system32\mspaint.exe
+Param   =
+ExecDir =
+
+[Application]
+Group   =0
+Name    =メモ帳
+AppPath =C:\Windows\system32\notepad.exe
+Param   =
+ExecDir =
+
+;===============================================================
+[Separator]
+Group   =0
+
+;---------------------------------------------------------------
+[SubMenu]
+Parent  =0
+Group   =2
+Title   =テキスト処理
+
+[Script]
+Group   =2
+Name    =選択したテキストを開く
+Script  =OpenSelectedText
+ParamN  =
+
+[Script]
+Group   =2
+Name    =選択したテキストに引用記号(>)を追加
+Script  =QuoteSelectedText
+ParamN  => 

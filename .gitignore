@@ -9,3 +9,8 @@ Installer.ahk
 Template.ahk
 WindowSpy.ahk
 license.txt
+
+# Congifure files
+
+Config/*.ini
+Config/*.ahk

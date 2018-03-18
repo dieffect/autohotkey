@@ -1,6 +1,6 @@
 # autohotkey
 
-##About
+## About
 
 [AutoHotKey](https://autohotkey.com/download/)用の個人的な設定環境です。
 

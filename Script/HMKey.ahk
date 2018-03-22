@@ -7,15 +7,21 @@
 ; メニュー初期化
 ;-----------------------------------------------------------------------
 InitHMKey() {
-	global HM_Modifier := new CHM_Modifier()
+	if (AppIniRead("HM_Modifier", "Enable", "false") != "true") {
+		return
+	}
+	CHM_Modifier.Instance := new CHM_Modifier()
 }
 
 ;-----------------------------------------------------------------------
 ; 変換/無変換 修飾キー割り当て
 ;-----------------------------------------------------------------------
 HMKey(Key, HKey = "", MKey = "", HMKey = "") {
-	global HM_Modifier
-	HM_Modifier.KeyHandler(Key, HKey, MKey, HMKey)
+	if (!IsObject(CHM_Modifier.Instance)) {
+		Send, {Blind}{%Key%}
+		return
+	}
+	CHM_Modifier.Instance.KeyHandler(Key, HKey, MKey, HMKey)
 }
 
 ;-----------------------------------------------------------------------
@@ -26,7 +32,7 @@ return
 
 HMKeyName:
 	Key := SubStr(A_ThisHotkey, 2)
-	HM_Modifier.KeyHandler("{" Key "}")
+	CHM_Modifier.Instance.KeyHandler("{" Key "}")
 return
 
 HMKeyArrow:
@@ -48,10 +54,10 @@ class CHM_Modifier
 	; コンストラクタ
 	;-----------------------------------------------------------------------
 	__New() {
-		if (IsObject(CHMKey.Instance)) {
+		if (IsObject(CHM_Modifier.Instance)) {
 			this.__Delete()
 		}
-		CHMKey.Instance := this
+		CHM_Modifier.Instance := this
 
 		this.Mod_Henkan := AppIniRead("HM_Modifier", "Henkan", "^")
 		this.Mod_Muhenkan := AppIniRead("HM_Modifier", "Muhenkan", "!")

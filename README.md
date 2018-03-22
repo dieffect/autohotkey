@@ -1,8 +1,8 @@
 # autohotkey
 
-##About
+## About
 
-[AutoHotKey](https://autohotkey.com/download/)用の個人的な設定環境です。
+個人的な[AutoHotKey](https://autohotkey.com/download/)の設定環境です。
 
 ## Requirements
 
@@ -16,7 +16,7 @@
    git clone https://github.com/dieffect/autohotkey.git AutoHotKey
    ```
 
-2. [AutoHotKeyのアーカイブ](https://autohotkey.com/download/ahk.zip)をクローンしたフォルダにコピーする。
+2. [AutoHotKeyのアーカイブ](https://autohotkey.com/download/ahk.zip)を展開したものをクローンしたフォルダにコピーする。
 
 3. `AutoHotkeyU64.exe`を実行する。
 

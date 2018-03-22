@@ -82,7 +82,8 @@ return
 ;-----------------------------------------------------------------------
 TrayMenuEditThisScript:
 	Editor := AppIniRead("Editor", "Path", "notepad.exe")
-	Run, %Editor% %A_ScriptFullPath%
+	HotKeyConfig := IniPath("HotKeys.ahk")
+	Run, %Editor% %HotKeyConfig%
 return
 
 ;-----------------------------------------------------------------------

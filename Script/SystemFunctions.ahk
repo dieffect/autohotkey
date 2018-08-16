@@ -34,7 +34,7 @@ RunApp(AppPath, Param, ExecDir, State = "") {
 	if (ExecDir == "") {
 		SplitPath, AppPath,, ExecDir
 	}
-	Run, "%AppPath%" %Param%, "%ExecDir%", %State%, ProcessId
+	Run, "%AppPath%" %Param%, %ExecDir%, %State%, ProcessId
 	if (ProcessId != "") {
 		WinWait, ahk_pid %ProcessId%, , 5
 		if (ErrorLevel == 0) {

@@ -84,29 +84,10 @@ class CClipboardHistory
 	; OnClipboardChange
 	;-----------------------------------------------------------------------
 	OnClipboardChange() {
-		; テキストとして使用できるデータが格納されている 
-		if (A_EventInfo = 1) {
+		Sleep, 100
+		ClipWait, 1
+		if (ErrorLevel == 0) {
 			this.AppendText(ClipBoard)
-		}
-		else {
-			Data := ClipBoard
-			if (Data != "") {
-				Text := ""
-				Loop, parse, Data, `n, `r
-				{
-					if (A_LoopField != "") {
-						if (Text == "") {
-							Text .= A_LoopField
-						}
-						else {
-							Text .= "`r`n" . A_LoopField
-						}
-					}
-				}
-				if (Text != "") {
-					this.AppendText(Text)
-				}
-			}
 		}
 	}
 	

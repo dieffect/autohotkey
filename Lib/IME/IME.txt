@@ -1,4 +1,4 @@
-Autohotkey IME制御用 関数集 (コピペ/組込用)(IME.ahk)
+﻿Autohotkey IME制御用 関数集 (コピペ/組込用)(IME.ahk)
     NT/98系両対応(たぶん)  (Autohotkey v1.0.34以降)
                                              2008.09.20
 

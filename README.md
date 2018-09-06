@@ -1,4 +1,4 @@
-# autohotkey
+﻿# autohotkey
 
 ## About
 

@@ -287,8 +287,8 @@ class pumAPI extends pumAPI_base
   StrSplit(str,delim,omit = "") {
     if (strlen(delim) > 1)
     {
-      StringReplace,str,str,% delim,ƒ,1 		;■¶╬
-      delim = ƒ
+      StringReplace,str,str,% delim,,1 		;■¶
+      delim = 
     }
     ra := Array()
     loop, parse,str,% delim,% omit

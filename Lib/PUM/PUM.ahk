@@ -1,4 +1,4 @@
-﻿/* 
+/* 
 PUM class represents popup menu manager
 
 Documentation available here

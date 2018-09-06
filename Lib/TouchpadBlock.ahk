@@ -1,4 +1,4 @@
-﻿; v1.0 2010-02-23 Original Release
+; v1.0 2010-02-23 Original Release
 ; v1.1 2010-02-25 Added user configuration section
 ;                 Added option to block mouse clicks
 ;                 Added option to omit blocking for shift, ctrl, alt, win keys

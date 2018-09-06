@@ -1,4 +1,4 @@
-﻿#NoEnv
+#NoEnv
 ;#Include PUM_API.ahk
 ;#Include PUM.ahk
 

@@ -84,9 +84,10 @@ class CClipboardHistory
 	; OnClipboardChange
 	;-----------------------------------------------------------------------
 	OnClipboardChange() {
-		Sleep, 100
+		Sleep, 75
 		ClipWait, 1
 		if (ErrorLevel == 0) {
+			Sleep, 75
 			this.AppendText(ClipBoard)
 		}
 	}

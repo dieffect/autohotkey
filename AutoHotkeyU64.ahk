@@ -15,6 +15,7 @@ InitSub:
 	#SingleInstance force
 	#InstallKeybdHook
 	#InstallMouseHook
+	#MaxHotkeysPerInterval 200
 	CoordMode, Mouse, Screen
 	CoordMode, Caret, Screen
 	CoordMode, Tooltip, Screen

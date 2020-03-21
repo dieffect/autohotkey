@@ -63,6 +63,8 @@ CheckHotKeyFile()
 #include %A_ScriptDir%/Config
 #include *i HotKeys.ahk
 
+#include <EasyWindowDrag_(KDE)>
+
 ; Scriptディレクトリ
 #include %A_ScriptDir%/Script
 #include SubProcessIF.ahk

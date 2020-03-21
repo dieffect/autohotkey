@@ -21,7 +21,7 @@ x2Key(Key, Func) {
 SendKey(RealKey, SimulateKey, Delay = 0.25, Repeat = 0.01) {
     SetKeyDelay, 0
 	real := Trim(RealKey, "{}")
-    ;ToolTip, %RealKey% / %SimulateKey%
+    ;ToolTip, %RealKey% / %SimulateKey% / %Delay% / %Repeat%
     Send, {Blind}%SimulateKey%
     KeyWait, %real%, T%Delay%
     While (ErrorLevel <> 0) {

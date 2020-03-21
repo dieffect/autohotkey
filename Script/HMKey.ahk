@@ -49,6 +49,8 @@ class CHM_Modifier
 	Mod_Henkan :=
 	Mod_Muhenkan :=
 	Mod_Henkan_Muhenkan :=
+	KeyRepeatDelay := 
+	KeyRepeatInterval :=
 
 	;-----------------------------------------------------------------------
 	; コンストラクタ
@@ -62,7 +64,8 @@ class CHM_Modifier
 		this.Mod_Henkan := AppIniRead("HM_Modifier", "Henkan", "^")
 		this.Mod_Muhenkan := AppIniRead("HM_Modifier", "Muhenkan", "!")
 		this.Mod_Henkan_Muhenkan := AppIniRead("HM_Modifier", "Henkan_Muhenkan", "^!")
-
+		this.KeyRepeatDelay := AppIniRead("HM_Modifier", "KeyRepeatDelay", 0.25)
+		this.KeyRepeatInterval := AppIniRead("HM_Modifier", "KeyRepeatInterval", 0.01)
 		this.MapDefaultKeys()
 	}
 	
@@ -171,7 +174,7 @@ class CHM_Modifier
 			this.DefKeyCmd_(HMKey, Key, this.Mod_Henkan_Muhenkan)
 		}
 		else {
-			SendKey(Key, Key)
+			SendKey(Key, Key, this.KeyRepeatDelay, this.KeyRepeatInterval)
 		}
 	}
 
@@ -183,14 +186,14 @@ class CHM_Modifier
 	;-----------------------------------------------------------------------
 	DefKeyCmd_(Cmd, DefKey, Mod) {
 		if (Cmd == "") {
-			SendKey(DefKey, Mod . DefKey)
+			SendKey(DefKey, Mod . DefKey, this.KeyRepeatDelay, this.KeyRepeatInterval)
 		}
 		else {
 			if (IsObject(Cmd)) {
 				CallFunc(Cmd)
 			}
 			else {
-				SendKey(DefKey, Cmd)
+				SendKey(DefKey, Cmd, this.KeyRepeatDelay, this.KeyRepeatInterval)
 			}
 		}
 	}

@@ -19,6 +19,16 @@ SetVolatileEnv() {
 }
 
 ;***********************************************************************************************
+; 環境変数を展開する
+;***********************************************************************************************
+ExpandEnvironmentVriables(text) {
+	nSize := DllCall("ExpandEnvironmentStrings", "Str", text, "Str", NULL, "UInt", 0, "UInt")
+	VarSetCapacity(Dest, size := (nSize * (1 << !!A_IsUnicode)) + !A_IsUnicode)
+	DllCall("ExpandEnvironmentStrings", "Str", text, "Str", Dest, "UInt", size, "UInt")
+	return Dest
+}
+
+;***********************************************************************************************
 ; スクリプトを実行
 ;***********************************************************************************************
 RunSubScript(ScriptName, RelativeScriptPath) {
@@ -34,7 +44,9 @@ RunApp(AppPath, Param, ExecDir, State = "") {
 	if (ExecDir == "") {
 		SplitPath, AppPath,, ExecDir
 	}
-	Run, "%AppPath%" %Param%, %ExecDir%, %State%, ProcessId
+	expAppPath := ExpandEnvironmentVriables(AppPath)
+	expExecDir := ExpandEnvironmentVriables(ExecDir)
+	Run, "%expAppPath%" %Param%, %expExecDir%, %State%, ProcessId
 	if (ProcessId != "") {
 		WinWait, ahk_pid %ProcessId%, , 5
 		if (ErrorLevel == 0) {

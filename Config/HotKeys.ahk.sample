@@ -28,10 +28,10 @@ WheelRight::PopupLauncher("M")
 *vkF0::ToggleIME() ; [Caps Lock/英数]
 
 ; 方向キーの割り当て
-*h::HMKey("h", ["ArrowKey", "h", "Left" ], "{Home}", "{Del}")
-*k::HMKey("k", ["ArrowKey", "k", "Up"   ], "{PgUp}")
-*j::HMKey("j", ["ArrowKey", "j", "Down" ], "{PgDn}")
-*l::HMKey("l", ["ArrowKey", "l", "Right"], "{End}")
+*h::HMKey("h", {"Left"}, "{Home}", "{Del}")
+*k::HMKey("k", {"Up"}, "{PgUp}")
+*j::HMKey("j", {"Down"}, "{PgDn}")
+*l::HMKey("l", {"Right"}, "{End}")
 
 ; Enter, BackSpace, Delete, Esc の割り当て
 *m::HMKey("m", "{Enter}", "{BS}")

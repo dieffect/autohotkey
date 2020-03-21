@@ -30,14 +30,14 @@ HMKey(Key, HKey = "", MKey = "", HMKey = "") {
 HMKeyDoNothing:
 return
 
-HMKeyName:
+HMKeyNormal:
 	Key := SubStr(A_ThisHotkey, 2)
-	CHM_Modifier.Instance.KeyHandler("{" Key "}")
+	Send, {Blind}{%Key%}
 return
 
-HMKeyArrow:
+HMKeyRepeat:
 	Key := SubStr(A_ThisHotkey, 2)
-	ArrowKey(Key, Key)
+	CHM_Modifier.Instance.KeyHandler("{" Key "}")
 return
 
 ;***********************************************************************************************
@@ -101,13 +101,13 @@ class CHM_Modifier
 		Characters := "0123456789abcdefghijklmnopqrstuvwxyz-^\@[;:],./"
 		Loop, Parse, Characters
 		{
-			this.Map("*" . A_LoopField)
+			this.Map("*" . A_LoopField, "HMKeyRepeat")
 		}
 
 		; 方向キー
 		ArrowKeys := ["Left", "Right", "Up", "Down"]
 		for index, element in ArrowKeys {
-			this.Map("*" . element, "HMKeyArrow")
+			this.Map("*" . element, "HMKeyRepeat")
 		}
 
 		; 記号/空白/制御
@@ -115,7 +115,7 @@ class CHM_Modifier
 					, "PgUp", "PgDn", "Esc", "AppsKey", "PrintScreen", "Pause"
 					, "Break", "Sleep", "CtrlBreak", "CapsLock", "ScrollLock"]
 		for index, element in Controls {
-			this.Map("*" . element)
+			this.Map("*" . element, "HMKeyRepeat")
 		}
 
 		; テンキー(※"NumLock"はトグルキーなので対象外)
@@ -123,7 +123,7 @@ class CHM_Modifier
 				, "Dot", "Del", "Ins", "Clear", "Up", "Down", "Left", "Right"
 				, "Home", "End", "PgUp", "PgDn", "Div", "Mult", "Add", "Sub", "Enter"]
 		for index, element in Numpads {
-			this.Map("*Numpad" . element)
+			this.Map("*Numpad" . element, "HMKeyRepeat")
 		}
 
 		; メディア
@@ -137,7 +137,7 @@ class CHM_Modifier
 		}
 	}
 
-	Map(Key, Label = "HMKeyName") {
+	Map(Key, Label = "HMKeyNormal") {
 		; ホットキーが定義されていない場合のみ、定義する。
 		Hotkey, %Key%, , UseErrorLevel
 		if ((ErrorLevel == 5) || (ErrorLevel == 6)) {
@@ -171,37 +171,26 @@ class CHM_Modifier
 			this.DefKeyCmd_(HMKey, Key, this.Mod_Henkan_Muhenkan)
 		}
 		else {
-			this.KeyCmd_(Key, "")
+			SendKey(Key, Key)
 		}
 	}
 
 	;-----------------------------------------------------------------------
 	; キーまたはコマンドの実行
 	; Cmd: キーまたはコマンド
-	; DefCmd: Cmdが指定されていない場合のキーまたはコマンド
-	; DefMod: 修飾キー(※DefCmdがキーの場合に有効)
+	; DefKey: デフォルトキー
+	; Mod: 修飾キー
 	;-----------------------------------------------------------------------
-	DefKeyCmd_(Cmd, DefCmd, DefMod) {
+	DefKeyCmd_(Cmd, DefKey, Mod) {
 		if (Cmd == "") {
-			this.KeyCmd_(DefCmd, DefMod)
+			SendKey(DefKey, Mod . DefKey)
 		}
 		else {
-			this.KeyCmd_(Cmd, "")
-		}
-	}
-
-	;-----------------------------------------------------------------------
-	; キーまたはコマンドの実行
-	; Cmd: キーまたはコマンド
-	; Mod: 修飾キー(※キーの場合に有効)
-	;-----------------------------------------------------------------------
-	KeyCmd_(Cmd, Mod) {
-		if (Cmd != "") {
 			if (IsObject(Cmd)) {
 				CallFunc(Cmd)
 			}
 			else {
-				Send, {Blind}%Mod%%Cmd%
+				SendKey(DefKey, Cmd)
 			}
 		}
 	}

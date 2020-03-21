@@ -18,8 +18,16 @@ x2Key(Key, Func) {
 ;***********************************************************************************************
 ; キー送信
 ;***********************************************************************************************
-SendKey(Key) {
-	Send, %Key%
+SendKey(RealKey, SimulateKey, Delay = 0.25, Repeat = 0.01) {
+    SetKeyDelay, 0
+	real := Trim(RealKey, "{}")
+    ;ToolTip, %RealKey% / %SimulateKey%
+    Send, {Blind}%SimulateKey%
+    KeyWait, %real%, T%Delay%
+    While (ErrorLevel <> 0) {
+ 		Send, {Blind}%SimulateKey%
+		KeyWait, %real%, T%Repeat%
+	}
 }
 
 ;***********************************************************************************************
@@ -33,25 +41,6 @@ HotKeySw(Key, Sw) {
 	else {
 		Hotkey, %Key%, %Sw%
 	}
-}
-
-;***********************************************************************************************
-; 矢印キーのエミュレート
-;***********************************************************************************************
-ArrowKey(Input, Output, Modifier = "") {
-	SetKeyDelay, 0
-	
-	Key := "{" Output " down}"
-	Mod := GetExKeyStr(Modifier)
-	Send, {Blind}%Mod%%Key%
-	KeyWait, %Input%, T0.25
-	While (ErrorLevel <> 0) {
-		Mod := GetExKeyStr(Modifier)
- 		Send, {Blind}%Mod%%Key%
-		KeyWait, %Input%, T0.01
-	}
-	Key := "{" Output " up}"
-	Send, {Blind}%Key%	; {Ctrl Up}		; Ctrlが押されたままになることがあるので{Ctrl Up}を送信する
 }
 
 ;***********************************************************************************************

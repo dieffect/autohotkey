@@ -174,7 +174,7 @@ class CHM_Modifier
 			this.DefKeyCmd_(HMKey, Key, this.Mod_Henkan_Muhenkan)
 		}
 		else {
-			SendKey(Key, Key, this.KeyRepeatDelay, this.KeyRepeatInterval)
+			this.DefKeyCmd_(Key, Key, "")
 		}
 	}
 
@@ -184,17 +184,12 @@ class CHM_Modifier
 	; DefKey: デフォルトキー
 	; Mod: 修飾キー
 	;-----------------------------------------------------------------------
-	DefKeyCmd_(Cmd, DefKey, Mod) {
-		if (Cmd == "") {
-			SendKey(DefKey, Mod . DefKey, this.KeyRepeatDelay, this.KeyRepeatInterval)
+	DefKeyCmd_(CmdOrKey, DefKey, Mod) {
+		if (IsObject(CmdOrKey)) {
+			CallFunc(CmdOrKey)
 		}
 		else {
-			if (IsObject(Cmd)) {
-				CallFunc(Cmd)
-			}
-			else {
-				SendKey(DefKey, Cmd, this.KeyRepeatDelay, this.KeyRepeatInterval)
-			}
+			SendKey(DefKey, CmdOrKey, this.KeyRepeatDelay, this.KeyRepeatInterval)
 		}
 	}
 }

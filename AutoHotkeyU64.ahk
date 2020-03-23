@@ -73,6 +73,7 @@ CheckHotKeyFile()
 #include WheelRedirect.ahk
 #include KeyFunctions.ahk
 #include TextFunctions.ahk
+#include WindowFunctions.ahk
 #include HMKey.ahk
 
 ; カレントディレクトリ

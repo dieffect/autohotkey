@@ -323,7 +323,7 @@ class CPopupLauncher
 	;-----------------------------------------------------------------------
 	Open_(Group, Index) {
 		if (this.Items[Group][Index, 1] == "App") {
-			AppPath := this.Items[Group][Index, 3]
+			AppPath := ExpandEnvironmentVriables(this.Items[Group][Index, 3])
 			SplitPath, AppPath,, AppDir
 			Cmd := "Explorer /e," . AppDir
 			Run, %Cmd%

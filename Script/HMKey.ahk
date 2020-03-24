@@ -185,11 +185,19 @@ class CHM_Modifier
 	; Mod: 修飾キー
 	;-----------------------------------------------------------------------
 	DefKeyCmd_(CmdOrKey, DefKey, Mod) {
+		;tooltip, "%CmdOrKey% / %DefKey% / %Mod%"
 		if (IsObject(CmdOrKey)) {
 			CallFunc(CmdOrKey)
 		}
 		else {
-			SendKey(DefKey, CmdOrKey, this.KeyRepeatDelay, this.KeyRepeatInterval)
+			if (CmdOrKey == "") {
+				key := Mod . DefKey
+			}
+			else {
+				key := CmdOrKey
+			}
+			;tooltip, "%CmdOrKey% / %DefKey% / %Mod% / %key%"
+			SendKey(DefKey, key, this.KeyRepeatDelay, this.KeyRepeatInterval)
 		}
 	}
 }

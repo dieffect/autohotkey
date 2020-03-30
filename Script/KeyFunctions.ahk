@@ -35,8 +35,9 @@ SendKey(RealKey, SimulateKey, Delay = 0.25, Repeat = 0.01) {
 ;***********************************************************************************************
 SendKeyWithIME(RealKey, SimulateKey, ImeState, Delay = 0.25, Repeat = 0.01) {
 	if (IME_GET()) {
-		Send, {Esc}
-		Sleep 0
+		if (IME_GetConverting()) {
+			Send, {Esc}
+		}
 	}
 	IME_SET(ImeState)
 	SendKey(RealKey, SimulateKey, Delay, Repeat)

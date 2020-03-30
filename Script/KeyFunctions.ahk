@@ -21,13 +21,23 @@ x2Key(Key, Func) {
 SendKey(RealKey, SimulateKey, Delay = 0.25, Repeat = 0.01) {
     SetKeyDelay, 0
 	real := Trim(RealKey, "{}")
-    ;ToolTip, %RealKey% / %SimulateKey% / %Delay% / %Repeat%
-    Send, {Blind}%SimulateKey%
+	if (InStr(SimulateKey, "}")) {
+		sim := RTrim(SimulateKey, "}")
+	}
+	else {
+		sim := "{" + SimulateKey
+	}
+    key := sim " down}"
+    ;ToolTip, %RealKey% => %real% / %SimulateKey% => %key% / %Delay% / %Repeat%, 0, 0
+    Send, {Blind}%key%
     KeyWait, %real%, T%Delay%
     While (ErrorLevel <> 0) {
- 		Send, {Blind}%SimulateKey%
+ 		Send, {Blind}%key%
 		KeyWait, %real%, T%Repeat%
 	}
+	key := sim " up}"
+	Send, {Blind}%key%
+	;ToolTip, %RealKey% => %real% / %SimulateKey% => %key% / %Delay% / %Repeat%, 0, 0
 }
 
 ;***********************************************************************************************

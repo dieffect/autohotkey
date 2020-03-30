@@ -113,20 +113,31 @@ class CHM_Modifier
 			this.Map("*" . element, "HMKeyRepeat")
 		}
 
-		; 記号/空白/制御
-		Controls := ["Space", "Tab", "Enter", "BS", "Del", "Ins", "Home", "End"
-					, "PgUp", "PgDn", "Esc", "AppsKey", "PrintScreen", "Pause"
-					, "Break", "Sleep", "CtrlBreak", "CapsLock", "ScrollLock"]
+		; 記号/空白/制御1
+		Controls := ["Space", "Tab", "BS", "Del", "PgUp", "PgDn"]
 		for index, element in Controls {
 			this.Map("*" . element, "HMKeyRepeat")
 		}
+		
+		; 記号/空白/制御2
+		Controls := ["Enter", "Ins", "Home", "End", "Esc", "AppsKey", "PrintScreen"
+				   , "Pause", "Break", "Sleep", "CtrlBreak", "CapsLock", "ScrollLock"]
+		for index, element in Controls {
+			this.Map("*" . element)
+		}
 
-		; テンキー(※"NumLock"はトグルキーなので対象外)
+		; テンキー1(※"NumLock"はトグルキーなので対象外)
 		Numpads := ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
-				, "Dot", "Del", "Ins", "Clear", "Up", "Down", "Left", "Right"
-				, "Home", "End", "PgUp", "PgDn", "Div", "Mult", "Add", "Sub", "Enter"]
+				, "Dot", "Del", "Up", "Down", "Left", "Right"
+				, "PgUp", "PgDn", "Div", "Mult", "Add", "Sub"]
 		for index, element in Numpads {
 			this.Map("*Numpad" . element, "HMKeyRepeat")
+		}
+		
+		; テンキー2(※"NumLock"はトグルキーなので対象外)
+		Numpads := ["Ins", "Clear", "Home", "End", "Enter"]
+		for index, element in Numpads {
+			this.Map("*Numpad" . element)
 		}
 
 		; メディア

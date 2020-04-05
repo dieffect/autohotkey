@@ -22,6 +22,7 @@ SendKey(RealKey, SimulateKey, Delay = 0.5, Repeat = 0.25) {
 	real := Trim(RealKey, "{}")
     SendInput, {Blind}%SimulateKey%
     KeyWait, %real%, T%Delay%
+    ;ToolTip, %RealKey% => %real% / %SimulateKey% / %Delay% / %Repeat%, 0, 0
     if (ErrorLevel <> 0) {
         if (InStr(SimulateKey, "}")) {
             sim := RTrim(SimulateKey, "}")
@@ -44,10 +45,10 @@ SendKey(RealKey, SimulateKey, Delay = 0.5, Repeat = 0.25) {
 ;***********************************************************************************************
 ; IME制御付きキー送信
 ;***********************************************************************************************
-SendKeyWithIME(RealKey, SimulateKey, ImeState, Delay = 0.25, Repeat = 0.01) {
+SendKeyWithIME(RealKey, SimulateKey, ImeState, Delay = 0.5, Repeat = 0.05) {
 	if (IME_GET()) {
 		if (IME_GetConverting()) {
-			Send, {Esc}
+			SendInput, {Esc}
 		}
 	}
 	IME_SET(ImeState)

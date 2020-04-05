@@ -16,7 +16,7 @@ InitHMKey() {
 ;-----------------------------------------------------------------------
 ; 変換/無変換 修飾キー割り当て
 ;-----------------------------------------------------------------------
-HMKey(Key, HKey = "", MKey = "", HMKey = "") {
+HMKeyMap(Key, HKey = "", MKey = "", HMKey = "") {
 	if (!IsObject(CHM_Modifier.Instance)) {
 		Send, {Blind}{%Key%}
 		return
@@ -24,18 +24,18 @@ HMKey(Key, HKey = "", MKey = "", HMKey = "") {
 	CHM_Modifier.Instance.KeyHandler(Key, HKey, MKey, HMKey)
 }
 
+; キー割り当て関数
+HMKey(key, delay = -1, interval = -1) {
+	return ["@HMKey", key, delay, interval]
+}
+
 ;-----------------------------------------------------------------------
 ; キーマップ用のハンドラ
 ;-----------------------------------------------------------------------
-HMKeyDoNothing:
+HMKeyDoNothingHandler:
 return
 
-HMKeyNormal:
-	Key := SubStr(A_ThisHotkey, 2)
-	Send, {Blind}{%Key%}
-return
-
-HMKeyRepeat:
+HMKeyDefaultHandler:
 	Key := SubStr(A_ThisHotkey, 2)
 	CHM_Modifier.Instance.KeyHandler("{" Key "}")
 return
@@ -64,8 +64,8 @@ class CHM_Modifier
 		this.Mod_Henkan := AppIniRead("HM_Modifier", "Henkan", "^")
 		this.Mod_Muhenkan := AppIniRead("HM_Modifier", "Muhenkan", "!")
 		this.Mod_Henkan_Muhenkan := AppIniRead("HM_Modifier", "Henkan_Muhenkan", "^!")
-		this.KeyRepeatDelay := AppIniRead("HM_Modifier", "KeyRepeatDelay", 0.25)
-		this.KeyRepeatInterval := AppIniRead("HM_Modifier", "KeyRepeatInterval", 0.01)
+		this.KeyRepeatDelay := AppIniRead("HM_Modifier", "KeyRepeatDelay", 0.5)
+		this.KeyRepeatInterval := AppIniRead("HM_Modifier", "KeyRepeatInterval", 0.05)
 		this.MapDefaultKeys()
 	}
 	
@@ -80,8 +80,8 @@ class CHM_Modifier
 	;-----------------------------------------------------------------------
 	MapDefaultKeys() {
 		; 変換/無変換 キーを無効化する
-		this.Map("*vk1C", "HMKeyDoNothing") ; [変換]
-		this.Map("*vk1D", "HMKeyDoNothing") ; [無変換]
+		this.Map("*vk1C", "HMKeyDoNothingHandler") ; [変換]
+		this.Map("*vk1D", "HMKeyDoNothingHandler") ; [無変換]
 
 		; 日本語キーボード
 		JpKeys := [	 "vkBB"
@@ -104,38 +104,27 @@ class CHM_Modifier
 		Characters := "0123456789abcdefghijklmnopqrstuvwxyz-^\@[;:],./"
 		Loop, Parse, Characters
 		{
-			this.Map("*" . A_LoopField, "HMKeyRepeat")
+			this.Map("*" . A_LoopField)
 		}
 
 		; 方向キー
 		ArrowKeys := ["Left", "Right", "Up", "Down"]
 		for index, element in ArrowKeys {
-			this.Map("*" . element, "HMKeyRepeat")
+			this.Map("*" . element)
 		}
 
-		; 記号/空白/制御1
-		Controls := ["Space", "Tab", "BS", "Del", "PgUp", "PgDn"]
-		for index, element in Controls {
-			this.Map("*" . element, "HMKeyRepeat")
-		}
-		
-		; 記号/空白/制御2
-		Controls := ["Enter", "Ins", "Home", "End", "Esc", "AppsKey", "PrintScreen"
-				   , "Pause", "Break", "Sleep", "CtrlBreak", "CapsLock", "ScrollLock"]
+		; 記号/空白/制御
+		Controls := ["Space", "Tab", "Enter", "BS", "Del", "Ins", "Home", "End"
+					, "PgUp", "PgDn", "Esc", "AppsKey", "PrintScreen", "Pause"
+					, "Break", "Sleep", "CtrlBreak", "CapsLock", "ScrollLock"]
 		for index, element in Controls {
 			this.Map("*" . element)
 		}
 
-		; テンキー1(※"NumLock"はトグルキーなので対象外)
+		; テンキー(※"NumLock"はトグルキーなので対象外)
 		Numpads := ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
-				, "Dot", "Del", "Up", "Down", "Left", "Right"
-				, "PgUp", "PgDn", "Div", "Mult", "Add", "Sub"]
-		for index, element in Numpads {
-			this.Map("*Numpad" . element, "HMKeyRepeat")
-		}
-		
-		; テンキー2(※"NumLock"はトグルキーなので対象外)
-		Numpads := ["Ins", "Clear", "Home", "End", "Enter"]
+				, "Dot", "Del", "Ins", "Clear", "Up", "Down", "Left", "Right"
+				, "Home", "End", "PgUp", "PgDn", "Div", "Mult", "Add", "Sub", "Enter"]
 		for index, element in Numpads {
 			this.Map("*Numpad" . element)
 		}
@@ -151,7 +140,7 @@ class CHM_Modifier
 		}
 	}
 
-	Map(Key, Label = "HMKeyNormal") {
+	Map(Key, Label = "HMKeyDefaultHandler") {
 		; ホットキーが定義されていない場合のみ、定義する。
 		Hotkey, %Key%, , UseErrorLevel
 		if ((ErrorLevel == 5) || (ErrorLevel == 6)) {
@@ -167,6 +156,13 @@ class CHM_Modifier
 	; HMKey: 変換と無変換が押されている場合のキーまたはコマンド
 	;-----------------------------------------------------------------------
 	KeyHandler(Key, HKey = "", MKey = "", HMKey = "") {
+		DefKey := Key
+		if (IsObject(CmdOrKey)) {
+			if (CmdOrKey[1] == "@HMKey") {
+				DefKey := CmdOrKey[2]
+			}
+		}
+
 		Mod := 0
 		if (GetKeyState("vk1C", "P")) {
 			Mod += 1
@@ -176,16 +172,16 @@ class CHM_Modifier
 		}
 		
 		if ((Mod == 1) && (this.Mod_Henkan)) {
-			this.DefKeyCmd_(HKey, Key, this.Mod_Henkan)
+			this.DefKeyCmd_(HKey, DefKey, this.Mod_Henkan)
 		}
 		else if ((Mod == 2) && (this.Mod_Muhenkan)) {
-			this.DefKeyCmd_(MKey, Key, this.Mod_Muhenkan)
+			this.DefKeyCmd_(MKey, DefKey, this.Mod_Muhenkan)
 		}
 		else if ((Mod == 3) && (this.Mod_Henkan_Muhenkan)) {
-			this.DefKeyCmd_(HMKey, Key, this.Mod_Henkan_Muhenkan)
+			this.DefKeyCmd_(HMKey, DefKey, this.Mod_Henkan_Muhenkan)
 		}
 		else {
-			this.DefKeyCmd_(Key, Key, "")
+			this.DefKeyCmd_(Key, DefKey, "")
 		}
 	}
 
@@ -196,9 +192,13 @@ class CHM_Modifier
 	; Mod: 修飾キー
 	;-----------------------------------------------------------------------
 	DefKeyCmd_(CmdOrKey, DefKey, Mod) {
-		;tooltip, "%CmdOrKey% / %DefKey% / %Mod%"
 		if (IsObject(CmdOrKey)) {
-			CallFunc(CmdOrKey)
+			if (CmdOrKey[1] == "@HMKey") {
+				this.SendRepeatKey(DefKey, CmdOrKey[2], CmdOrKey[3], CmdOrKey[4])
+			}
+			else {
+				CallFunc(CmdOrKey)
+			}
 		}
 		else {
 			if (CmdOrKey == "") {
@@ -207,9 +207,26 @@ class CHM_Modifier
 			else {
 				key := CmdOrKey
 			}
-			;tooltip, "%CmdOrKey% / %DefKey% / %Mod% / %key%"
-			SendKey(DefKey, key, this.KeyRepeatDelay, this.KeyRepeatInterval)
+			this.SendRepeatKey(DefKey, key)
 		}
+	}
+
+	;-----------------------------------------------------------------------
+	; キーを送信する
+	; DefKey: デフォルトキー
+	; Key: キー
+	; Delay: キーリピートまでの時間
+	; Repeat: リピート間隔
+	;-----------------------------------------------------------------------
+	SendRepeatKey(DefKey, Key, Delay = -1, Repeat = -1) {
+		if (Delay < 0) {
+			Delay := CHM_Modifier.Instance.KeyRepeatDelay
+		}
+		if (Repeat < 0) {
+			Repeat := CHM_Modifier.Instance.KeyRepeatInterval
+		}
+		;ToolTip, %DefKey% / %Key% / %Delay% / %Repeat%, 0, 0
+		SendKey(DefKey, Key, Delay, Repeat)
 	}
 }
 

@@ -18,26 +18,27 @@ x2Key(Key, Func) {
 ;***********************************************************************************************
 ; キー送信
 ;***********************************************************************************************
-SendKey(RealKey, SimulateKey, Delay = 0.25, Repeat = 0.01) {
-    SetKeyDelay, 0
+SendKey(RealKey, SimulateKey, Delay = 0.5, Repeat = 0.25) {
 	real := Trim(RealKey, "{}")
-	if (InStr(SimulateKey, "}")) {
-		sim := RTrim(SimulateKey, "}")
-	}
-	else {
-		sim := "{" + SimulateKey
-	}
-    key := sim " down}"
-    ;ToolTip, %RealKey% => %real% / %SimulateKey% => %key% / %Delay% / %Repeat%, 0, 0
-    Send, {Blind}%key%
+    SendInput, {Blind}%SimulateKey%
     KeyWait, %real%, T%Delay%
-    While (ErrorLevel <> 0) {
- 		Send, {Blind}%key%
-		KeyWait, %real%, T%Repeat%
-	}
-	key := sim " up}"
-	Send, {Blind}%key%
-	;ToolTip, %RealKey% => %real% / %SimulateKey% => %key% / %Delay% / %Repeat%, 0, 0
+    if (ErrorLevel <> 0) {
+        if (InStr(SimulateKey, "}")) {
+            sim := RTrim(SimulateKey, "}")
+        }
+        else {
+            sim := "{" + SimulateKey
+        }
+        key := sim " down}"
+        ;ToolTip, %RealKey% => %real% / %SimulateKey% => %key% / %Delay% / %Repeat%, 0, 0
+        While (ErrorLevel <> 0) {
+            SendInput, {Blind}%key%
+            KeyWait, %real%, T%Repeat%
+        }
+        key := sim " up}"
+        SendInput, {Blind}%key%
+        ;ToolTip, %RealKey% => %real% / %SimulateKey% => %key% / %Delay% / %Repeat%, 0, 0
+    }
 }
 
 ;***********************************************************************************************

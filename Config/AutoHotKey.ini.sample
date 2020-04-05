@@ -18,6 +18,6 @@ Muhenkan =!
 ; 変換と無変換キー同時押しに割り当てる修飾キー
 Henkan_Muhenkan =^!
 ; キーリピート処理に入るまでの時間[s]
-KeyRepeatDelay =0.25
+KeyRepeatDelay =0.5
 ; キーリピート間隔[s]
-KeyRepeatInterval = 0.01
+KeyRepeatInterval = 0.05

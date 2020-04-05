@@ -28,14 +28,14 @@ WheelRight::PopupLauncher("M")
 *vkF0::ToggleIME() ; [Caps Lock/英数]
 
 ; 方向キーの割り当て
-*h::HMKey("h", {"Left"}, "{Home}", "{Del}")
-*k::HMKey("k", {"Up"}, "{PgUp}")
-*j::HMKey("j", {"Down"}, "{PgDn}")
-*l::HMKey("l", {"Right"}, "{End}")
+*h::HMKeyMap("h", {"Left"}, "{Home}", "{Del}")
+*k::HMKeyMap("k", {"Up"}, "{PgUp}")
+*j::HMKeyMap("j", {"Down"}, "{PgDn}")
+*l::HMKeyMap("l", {"Right"}, "{End}")
 
 ; Enter, BackSpace, Delete, Esc の割り当て
-*m::HMKey("m", "{Enter}", "{BS}")
-*n::HMKey("n", "{Esc}", "{Del}")
+*m::HMKeyMap("m", "{Enter}", "{BS}")
+*n::HMKeyMap("n", "{Esc}", "{Del}")
 
 ;***********************************************************************************************
 ; マウスホイール

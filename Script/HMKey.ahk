@@ -84,16 +84,16 @@ class CHM_Modifier
 		this.Map("*vk1D", "HMKeyDoNothingHandler") ; [無変換]
 
 		; 日本語キーボード
-		JpKeys := [	 "vkBB"
-					,"vkBA"
-					,"vkE2"
-					,"vkF3"		; [全角/半角] ※IMEのON/OFFで発生するイベントが違う。
-					,"vkF4"		;               Sendで送信する場合はどちらでも同じ
-					,"vkF0"		; [Caps Lock / 英数]
-					,"vkF2"]	; [ひらがな/カタカナ]
-		for index, element in JpKeys {
-			this.Map("*" . element)
-		}
+		;JpKeys := [ "vkBB"
+		;			,"vkBA"
+		;			,"vkE2"
+		;			,"vkF3"		; [全角/半角] ※IMEのON/OFFで発生するイベントが違う。
+		;			,"vkF4"		;               Sendで送信する場合はどちらでも同じ
+		;			,"vkF0"		; [Caps Lock / 英数]
+		;			,"vkF2"]	; [ひらがな/カタカナ]
+		;for index, element in JpKeys {
+		;	; 何もしない
+		;}
 
 		; ファンクション(F1-F24)
 		Loop, 24 {

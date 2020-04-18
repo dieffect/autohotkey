@@ -67,7 +67,7 @@ class CClipboardHistory
 					 ;,"onshow"		: ""
 					 ,"onclose"		: "CClipboardHistory_PumHandler_"
 					 ;,"pumfont"	: ""
-					 ,"mnemonicCmd": "select"}	; may be "select","run"
+					 ,"mnemonicCmd": "run"}	; may be "select","run"
 		this.Pum := new PUM(PumParams)
 		this.Menu := ""
 	}

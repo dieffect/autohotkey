@@ -610,7 +610,7 @@ class PUM_Menu extends PUM_base
   {
     if !this.alive
       return 0
-    id := ++this.objPUM._itemsCount
+    id := NumGet(&this.objPUM._items + 4*A_PtrSize) + 1
     item := new PUM_Item( id, this )
     this.objPUM._items[ id ] := item
     item.setParams( params, pos, fByPos )

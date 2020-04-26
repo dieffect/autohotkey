@@ -67,7 +67,8 @@ class CClipboardHistory
 					 ;,"onshow"		: ""
 					 ,"onclose"		: "CClipboardHistory_PumHandler_"
 					 ;,"pumfont"	: ""
-					 ,"mnemonicCmd": "run"}	; may be "select","run"
+					 ,"mnemonicCmd": "run"	    ; may be "select","run"
+					 ,"onmenuchar" : "CClipboardHistory_PumHandler_"}
 		this.Pum := new PUM(PumParams)
 		this.Menu := ""
 	}
@@ -232,15 +233,19 @@ class CClipboardHistory
 	; メニューハンドラ
 	;-----------------------------------------------------------------------
 	PumHandler_(Msg, Obj) {
-		Index := Obj.uid
 		if (Msg == "onselect") {
+			Index := Obj.uid
 			this.PumOnSelect(Index, Obj)
 		}
 		else if (Msg == "onrun") {
+			Index := Obj.uid
 			this.PumOnRun(Index, Obj)
 		}
 		else if (Msg == "onclose") {
-			this.PumOnClose(Index, Obj)
+			this.PumOnClose()
+		}
+		else if (Msg == "onmenuchar") {
+			this.PumOnMenuChar(Obj)
 		}
 		else {
 			
@@ -283,8 +288,34 @@ class CClipboardHistory
 	;-----------------------------------------------------------------------
 	; OnClose
 	;-----------------------------------------------------------------------
-	PumOnClose(Index, Obj) {
+	PumOnClose() {
 		tooltip
+	}
+	
+	;-----------------------------------------------------------------------
+	; OnMenuChar
+	;-----------------------------------------------------------------------
+	PumOnMenuChar(Obj) {	
+		if (Obj == Asc("h")) {
+			ControlGetFocus, control, A
+			PostMessage, 0x100, 37, 0, %control%, A
+		}
+		else if (Obj == Asc("k")) {
+			ControlGetFocus, control, A
+			PostMessage, 0x100, 38, 0, %control%, A
+		}
+		else if (Obj == Asc("l")) {
+			ControlGetFocus, control, A
+			PostMessage, 0x100, 39, 0, %control%, A
+		}
+		else if (Obj == Asc("j")) {
+			ControlGetFocus, control, A
+			PostMessage, 0x100, 40, 0, %control%, A
+		}
+		else {
+			return 0
+		}
+		return 1
 	}
 	
 	;-----------------------------------------------------------------------
@@ -401,7 +432,7 @@ class CClipboardHistory
 	; 新規アクセラレータキー取得
 	;-----------------------------------------------------------------------
 	NewAccessKey_(Index) {
-		KeyList := "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		KeyList := "1234567890ABCDEFGIMNOPQRSTUVWXYZ"
 		if (Index < 0 || StrLen(KeyList) < Index) {
 			Index := 1
 		}

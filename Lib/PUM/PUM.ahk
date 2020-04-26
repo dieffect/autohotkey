@@ -156,7 +156,8 @@ class PUM extends PUM_base
                           ,"onrun"       : ""
                           ,"onshow" : ""
                           ,"onclose" : ""
-                          ,"pumfont" : "" }
+                          ,"pumfont" : "" 
+						  ,"onmenuchar" : "" }
 }
 
 /* 
@@ -744,11 +745,22 @@ PUM_OnMenuChar( wParam, lParam, msg, hwnd )
   type := wParam >> 16
   hMenu := lParam
   itemsList := pumAPI._GetMenuItems( hMenu )
+  menu := pumAPI._GetMenuFromHandle( hMenu )
+  if IsFunc( foo := menu.objPUM.onmenuchar )
+  {
+    ret := %foo%( "onmenuchar", charCode )
+    if ( ret == 1 )
+      return 0
+  }
   itemPos := ""
   if ( charCode == 0x09 )
   {
-    mode := item.menu.objPUM.mnemonicCmd = "select" ? 3 : 2
-    return ( mode << 16 ) | nItem-1
+    if (menu.objPUM.mnemonicCmd = "run")
+	{
+	  ControlGetFocus, control, A
+	  PostMessage, 0x100, 13, 0, %control%, A
+	  return 0
+	}
   }
   for i,item in itemsList
     if ( item.hotCharCode == charCode )

@@ -146,7 +146,7 @@ class CPopupLauncher
 		}
 */
 		else if (Msg == "onmenuchar") {
-			this.PumOnMenuChar(Obj)
+			return this.PumOnMenuChar(Obj)
 		}
 		else {
 			
@@ -498,7 +498,7 @@ class CPopupLauncher
 ; メニューハンドラ
 ;-----------------------------------------------------------------------
 CPopupLauncher_PumHandler_(Msg, Obj) {
-	CPopupLauncher.Instance.PumHandler_(Msg, Obj)
+	return CPopupLauncher.Instance.PumHandler_(Msg, Obj)
 }
 
 ;-----------------------------------------------------------------------

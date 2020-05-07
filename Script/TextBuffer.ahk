@@ -165,7 +165,7 @@ class CTextBuffer
 			this.PumOnRun(Index1, Index2, Obj)
 		}
 		else if (Msg == "onmenuchar") {
-			this.PumOnMenuChar(Obj)
+			return this.PumOnMenuChar(Obj)
 		}
 		else if (Msg == "onclose") {
 			this.PumOnClose()
@@ -463,7 +463,7 @@ class CTextBuffer
 ; メニューハンドラ
 ;-----------------------------------------------------------------------
 CTextBuffer_PumHandler_(Msg, Obj) {
-	CTextBuffer.Instance.PumHandler_(Msg, Obj)
+	return CTextBuffer.Instance.PumHandler_(Msg, Obj)
 }
 
 ;***********************************************************************************************

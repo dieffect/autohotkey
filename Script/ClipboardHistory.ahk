@@ -245,7 +245,7 @@ class CClipboardHistory
 			this.PumOnClose()
 		}
 		else if (Msg == "onmenuchar") {
-			this.PumOnMenuChar(Obj)
+			return this.PumOnMenuChar(Obj)
 		}
 		else {
 			
@@ -445,7 +445,7 @@ class CClipboardHistory
 ; メニューハンドラ
 ;-----------------------------------------------------------------------
 CClipboardHistory_PumHandler_(Msg, Obj) {
-	CClipboardHistory.Instance.PumHandler_(Msg, Obj)
+	return CClipboardHistory.Instance.PumHandler_(Msg, Obj)
 }
 
 ;***********************************************************************************************

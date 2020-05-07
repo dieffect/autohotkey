@@ -750,7 +750,9 @@ PUM_OnMenuChar( wParam, lParam, msg, hwnd )
   {
     ret := %foo%( "onmenuchar", charCode )
     if ( ret == 1 )
-      return 0
+	{
+      return 0x0020ffff
+	}
   }
   itemPos := ""
   if ( charCode == 0x09 )
@@ -759,7 +761,7 @@ PUM_OnMenuChar( wParam, lParam, msg, hwnd )
 	{
 	  ControlGetFocus, control, A
 	  PostMessage, 0x100, 13, 0, %control%, A
-	  return 0
+	  return 0x0020ffff
 	}
   }
   for i,item in itemsList

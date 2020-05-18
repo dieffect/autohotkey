@@ -24,11 +24,6 @@ HMKeyMap(Key, HKey = "", MKey = "", HMKey = "") {
 	CHM_Modifier.Instance.KeyHandler(Key, HKey, MKey, HMKey)
 }
 
-; キー割り当て関数
-HMKey(key, delay = -1, interval = -1) {
-	return ["@HMKey", key, delay, interval]
-}
-
 ;-----------------------------------------------------------------------
 ; キーマップ用のハンドラ
 ;-----------------------------------------------------------------------
@@ -64,8 +59,6 @@ class CHM_Modifier
 		this.Mod_Henkan := AppIniRead("HM_Modifier", "Henkan", "^")
 		this.Mod_Muhenkan := AppIniRead("HM_Modifier", "Muhenkan", "!")
 		this.Mod_Henkan_Muhenkan := AppIniRead("HM_Modifier", "Henkan_Muhenkan", "^!")
-		this.KeyRepeatDelay := AppIniRead("HM_Modifier", "KeyRepeatDelay", 0.5)
-		this.KeyRepeatInterval := AppIniRead("HM_Modifier", "KeyRepeatInterval", 0.05)
 		this.MapDefaultKeys()
 	}
 	
@@ -156,13 +149,6 @@ class CHM_Modifier
 	; HMKey: 変換と無変換が押されている場合のキーまたはコマンド
 	;-----------------------------------------------------------------------
 	KeyHandler(Key, HKey = "", MKey = "", HMKey = "") {
-		DefKey := Key
-		if (IsObject(CmdOrKey)) {
-			if (CmdOrKey[1] == "@HMKey") {
-				DefKey := CmdOrKey[2]
-			}
-		}
-
 		Mod := 0
 		if (GetKeyState("vk1C", "P")) {
 			Mod += 1
@@ -172,16 +158,16 @@ class CHM_Modifier
 		}
 		
 		if ((Mod == 1) && (this.Mod_Henkan)) {
-			this.DefKeyCmd_(HKey, DefKey, this.Mod_Henkan)
+			this.DefKeyCmd_(HKey, Key, this.Mod_Henkan)
 		}
 		else if ((Mod == 2) && (this.Mod_Muhenkan)) {
-			this.DefKeyCmd_(MKey, DefKey, this.Mod_Muhenkan)
+			this.DefKeyCmd_(MKey, Key, this.Mod_Muhenkan)
 		}
 		else if ((Mod == 3) && (this.Mod_Henkan_Muhenkan)) {
-			this.DefKeyCmd_(HMKey, DefKey, this.Mod_Henkan_Muhenkan)
+			this.DefKeyCmd_(HMKey, Key, this.Mod_Henkan_Muhenkan)
 		}
 		else {
-			this.DefKeyCmd_(Key, DefKey, "")
+			this.DefKeyCmd_(Key, Key, "")
 		}
 	}
 
@@ -193,12 +179,7 @@ class CHM_Modifier
 	;-----------------------------------------------------------------------
 	DefKeyCmd_(CmdOrKey, DefKey, Mod) {
 		if (IsObject(CmdOrKey)) {
-			if (CmdOrKey[1] == "@HMKey") {
-				this.SendRepeatKey(DefKey, CmdOrKey[2], CmdOrKey[3], CmdOrKey[4])
-			}
-			else {
-				CallFunc(CmdOrKey)
-			}
+			CallFunc(CmdOrKey)
 		}
 		else {
 			if (CmdOrKey == "") {
@@ -207,26 +188,8 @@ class CHM_Modifier
 			else {
 				key := CmdOrKey
 			}
-			this.SendRepeatKey(DefKey, key)
+			Send, {Blind}%Key%
 		}
-	}
-
-	;-----------------------------------------------------------------------
-	; キーを送信する
-	; DefKey: デフォルトキー
-	; Key: キー
-	; Delay: キーリピートまでの時間
-	; Repeat: リピート間隔
-	;-----------------------------------------------------------------------
-	SendRepeatKey(DefKey, Key, Delay = -1, Repeat = -1) {
-		if (Delay < 0) {
-			Delay := CHM_Modifier.Instance.KeyRepeatDelay
-		}
-		if (Repeat < 0) {
-			Repeat := CHM_Modifier.Instance.KeyRepeatInterval
-		}
-		;ToolTip, %DefKey% / %Key% / %Delay% / %Repeat%, 0, 0
-		SendKey(DefKey, Key, Delay, Repeat)
 	}
 }
 
